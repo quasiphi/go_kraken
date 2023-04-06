@@ -7,14 +7,14 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	ws "github.com/aopoltorzhicky/go_kraken/websocket"
+	ws "github.com/quasiphi/go_kraken/websocket"
 )
 
 func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 
-	kraken := ws.NewKraken(ws.AuthSandboxBaseURL)
+	kraken := ws.NewKraken(ws.ProdBaseFuturesURL)
 	if err := kraken.Connect(); err != nil {
 		log.Fatalf("Error connecting to web socket: %s", err.Error())
 	}

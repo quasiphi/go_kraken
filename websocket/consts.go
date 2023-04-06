@@ -3,6 +3,7 @@ package websocket
 // URLs
 const (
 	ProdBaseURL        = "wss://ws.kraken.com"
+	ProdBaseFuturesURL = "wss://futures.kraken.com/ws/v1"
 	AuthBaseURL        = "wss://ws-auth.kraken.com"
 	SandboxBaseURL     = "wss://beta-ws.kraken.com"
 	AuthSandboxBaseURL = "wss://beta-ws-auth.kraken.com"

@@ -7,44 +7,44 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	ws "github.com/aopoltorzhicky/go_kraken/websocket"
+	ws "github.com/quasiphi/go_kraken/websocket"
 )
 
 func main() {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 
-	kraken := ws.NewKraken(ws.ProdBaseURL)
+	kraken := ws.NewKraken(ws.ProdBaseFuturesURL)
 	if err := kraken.Connect(); err != nil {
 		log.Fatalf("Error connecting to web socket: %s", err.Error())
 	}
 
-	// subscribe to BTCUSD`s book
-	if err := kraken.SubscribeBook([]string{ws.BTCUSD}, ws.Depth10); err != nil {
-		log.Fatalf("SubscribeBook error: %s", err.Error())
-	}
+	// // subscribe to BTCUSD`s book
+	// if err := kraken.SubscribeBook([]string{ws.BTCUSD}, ws.Depth10); err != nil {
+	// 	log.Fatalf("SubscribeBook error: %s", err.Error())
+	// }
 
 	// subscribe to BTCUSD`s candles
-	if err := kraken.SubscribeCandles([]string{ws.BTCUSD}, ws.Interval1440); err != nil {
+	if err := kraken.SubscribeCandles([]string{ws.BTCUSD}, ws.Interval5); err != nil {
 		log.Fatalf("SubscribeCandles error: %s", err.Error())
 	}
 
-	// subscribe to BTCUSD`s ticker
-	if err := kraken.SubscribeTicker([]string{ws.BTCUSD}); err != nil {
-		log.Fatalf("SubscribeTicker error: %s", err.Error())
-	}
+	// // subscribe to BTCUSD`s ticker
+	// if err := kraken.SubscribeTicker([]string{ws.BTCUSD}); err != nil {
+	// 	log.Fatalf("SubscribeTicker error: %s", err.Error())
+	// }
 
-	// subscribe to BTCUSD`s trades
-	if err := kraken.SubscribeTrades([]string{ws.BTCUSD}); err != nil {
-		log.Fatalf("SubscribeTrades error: %s", err.Error())
-	}
+	// // subscribe to BTCUSD`s trades
+	// if err := kraken.SubscribeTrades([]string{ws.BTCUSD}); err != nil {
+	// 	log.Fatalf("SubscribeTrades error: %s", err.Error())
+	// }
 
-	// subscribe to BTCUSD`s spread
-	if err := kraken.SubscribeSpread([]string{ws.BTCUSD}); err != nil {
-		log.Fatalf("SubscribeSpread error: %s", err.Error())
-	}
+	// // subscribe to BTCUSD`s spread
+	// if err := kraken.SubscribeSpread([]string{ws.BTCUSD}); err != nil {
+	// 	log.Fatalf("SubscribeSpread error: %s", err.Error())
+	// }
 
-	orderBook := ws.NewOrderBook(10, 5, 8)
+	// orderBook := ws.NewOrderBook(10, 5, 8)
 
 	for {
 		select {
@@ -81,12 +81,6 @@ func main() {
 				log.Printf("----Spread of %s----", update.Pair)
 				log.Printf("Ask: %s with %s", data.Ask.String(), data.AskVolume.String())
 				log.Printf("Bid: %s with %s", data.Bid.String(), data.BidVolume.String())
-			case ws.OrderBookUpdate:
-				if err := orderBook.ApplyUpdate(data, true); err != nil {
-					log.Fatal(err)
-				}
-
-				log.Print(orderBook.String())
 			default:
 			}
 		}
