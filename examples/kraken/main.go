@@ -4,11 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/quasiphi/go_kraken/rest"
+	kraken "github.com/quasiphi/go_kraken/kraken"
 )
 
 func main() {
-	api := rest.New(os.Getenv("KRAKEN_API_KEY"), os.Getenv("KRAKEN_SECRET"))
+	api := kraken.New(os.Getenv("KRAKEN_API_KEY"), os.Getenv("KRAKEN_SECRET"))
 	data, err := api.Ticker("XXBTZUSD")
 	if err != nil {
 		log.Panicln(err)
